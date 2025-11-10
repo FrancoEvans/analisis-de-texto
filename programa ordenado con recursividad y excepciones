@@ -1,0 +1,437 @@
+# PROGRAMA DE ANÁLISIS DE TEXTO
+
+def normalizar(palabra: str):
+    try:
+        for char in palabra:
+            if not char.isalpha():
+                palabra = palabra.replace(char, '')
+        return palabra.lower()
+    except AttributeError:
+        print("Error! Se esperaba una palabra de texto, no otro tipo de dato. Se devolvera una cadena vacia.")
+        return ""
+
+
+def crear_lista_palabras(txt):
+    try:
+        lista_palabras = [normalizar(p) for p in txt.split(' ')]
+        return lista_palabras
+    except AttributeError:
+        print("Error! El texto no es una cadena válida. Se devolvera una lista vacia.")
+        return []
+
+
+def info_basica_texto(txt):
+    lista_palabras = crear_lista_palabras(txt)
+    caracteres = len(txt)
+    palabras = len(txt.split(' '))
+    lineas = len(txt.splitlines())
+    letras = sumar_largos(lista_palabras)
+    letras_promedio = letras / palabras if palabras > 0 else 0
+    return caracteres, palabras, lineas, letras_promedio, lista_palabras
+
+def frecuencia_palabras(lista_palabras):
+    frecuencia = {}
+    for palabra in lista_palabras:
+        if palabra in frecuencia:
+            frecuencia[palabra] += 1
+        else:
+            frecuencia[palabra] = 1
+    unicas = []
+    for palabra, cantidad in frecuencia.items():
+        if cantidad == 1:
+            unicas.append(palabra)
+    try:
+        maximo = max(frecuencia.values())
+    except ValueError:
+        maximo = 0
+    mas_frecuentes = []
+    for palabra, cantidad in frecuencia.items():
+        if cantidad == maximo:
+            mas_frecuentes.append(palabra)
+
+    return frecuencia, mas_frecuentes, maximo, unicas
+
+
+def ranking_palabras(frecuencia, n=5):
+    ordenadas = sorted(frecuencia.items(), key=lambda x: x[1], reverse=True)
+    top_n_frecuentes = ordenadas[:n]
+    return top_n_frecuentes
+
+def palabra_mas_larga(lista_palabras, i=0, mayores=None):
+    if not lista_palabras:
+        return []
+    if mayores is None:
+        mayores = [lista_palabras[0]]
+    if i == len(lista_palabras):
+        return mayores
+
+    palabra = lista_palabras[i]
+    if len(palabra) > len(mayores[0]):
+        mayores = [palabra]
+    elif len(palabra) == len(mayores[0]) and palabra not in mayores:
+        mayores.append(palabra)
+
+    return palabra_mas_larga(lista_palabras, i + 1, mayores)
+
+
+
+def calcular_densidad_lexica(lista_palabras):
+    return len(set(lista_palabras)) / len(lista_palabras) if lista_palabras else 0
+
+def distribucion_longitudes(lista_palabras, porcentaje=False):
+    longitud_frecuencia = {}
+    total = len(lista_palabras)
+    for palabra in lista_palabras:
+        longitud = len(palabra)
+        if longitud in longitud_frecuencia:
+            longitud_frecuencia[longitud] += 1
+        else:
+            longitud_frecuencia[longitud] = 1
+    for longitud in longitud_frecuencia:
+        if porcentaje:
+            longitud_frecuencia[longitud] = (longitud_frecuencia[longitud] / total) * 100 if total > 0 else 0
+        else:
+            longitud_frecuencia[longitud] = longitud_frecuencia[longitud] / total if total > 0 else 0
+    return longitud_frecuencia
+
+def analizar_texto(txt):
+    caracteres, palabras, lineas, letras_promedio, lista_palabras = info_basica_texto(txt)
+    palabras_mas_largas = palabra_mas_larga(lista_palabras)
+    frecuencia, mas_frecuentes, maximo, unicas = frecuencia_palabras(lista_palabras)
+    densidad_lexica = calcular_densidad_lexica(lista_palabras)
+    frecuencia_longitudes = distribucion_longitudes(lista_palabras)
+    resultados = {
+        "caracteres": caracteres,
+        "palabras": palabras,
+        "lineas": lineas,
+        "promedio_letras": round(letras_promedio) if palabras > 0 else 0,
+        "palabras_mas_largas": palabras_mas_largas,  # <- FIX
+        "longitud_palabra_mas_larga": len(palabras_mas_largas[0]) if palabras_mas_largas else 0,
+        "frecuencia": frecuencia,
+        "mas_frecuentes": mas_frecuentes,
+        "maximo": maximo,
+        "unicas": unicas,
+        "densidad_lexica": densidad_lexica,
+        "longitudes_frecuencia": frecuencia_longitudes
+    }
+    return resultados
+
+def singular_plural(n, singular, plural):
+    return singular if n == 1 else plural
+
+def sumar_largos(lista, i=0):
+    if i == len(lista):
+        return 0
+    return len(lista[i]) + sumar_largos(lista, i + 1)
+
+def mostrar_textos_recursivo(textos, i=0):
+    if i == 0:
+        print("\n==============================")
+        print("       TEXTOS CARGADOS")
+        print("==============================")
+        if not textos:
+            print("No hay textos cargados.\n")
+            print("==============================")
+        return
+
+    print(f"\nTEXTO {i+1}")
+    print(textos[i])
+    mostrar_textos_recursivo(textos, i + 1)
+
+
+
+# ==========
+# REPORTES
+# ==========
+
+def reporte_opcion_1(textos):
+    resultados_todos = [analizar_texto(t) for t in textos]
+    print("\nREPORTE GENERAL DE TEXTOS")
+    print("-" * 35)
+
+    print("Cantidad de Caracteres:")
+    for i, r in enumerate(resultados_todos):
+        print(f"  Texto {i+1}: {r['caracteres']}")
+    print()
+
+    print("Cantidad de Palabras:")
+    for i, r in enumerate(resultados_todos):
+        print(f"  Texto {i+1}: {r['palabras']}")
+    print()
+
+    print("Cantidad de Líneas:")
+    for i, r in enumerate(resultados_todos):
+        print(f"  Texto {i+1}: {r['lineas']}")
+    print()
+
+    print("Promedio de Caracteres por Palabra:")
+    for i, r in enumerate(resultados_todos):
+        print(f"  Texto {i+1}: {r['promedio_letras']}")
+    print()
+
+    print("Palabra/s Más Larga/s:")
+    for i, r in enumerate(resultados_todos):
+        if r['longitud_palabra_mas_larga'] == 0:
+            print(f"  Texto {i+1}: No hay")
+        else:
+            lista = r['palabras_mas_largas']
+            largo = r['longitud_palabra_mas_larga']
+            sufijo = 'carácter' if largo == 1 else 'caracteres'
+            print(f"  Texto {i+1}: {lista} ({largo} {sufijo})")
+    print()
+
+    print("Palabras Más Frecuentes:")
+    for i, r in enumerate(resultados_todos):
+        if r['maximo'] == 0 or not r['mas_frecuentes']:
+            print(f"  Texto {i+1}: No hay")
+        else:
+            aparicion = "aparición" if r['maximo'] == 1 else "apariciones"
+            print(f"  Texto {i+1}: {r['mas_frecuentes']} ({r['maximo']} {aparicion})")
+    print()
+
+    print("Palabras Únicas (Cantidad):")
+    for i, r in enumerate(resultados_todos):
+        print(f"  Texto {i+1}: {len(r['unicas'])}")
+    print()
+
+    print("Densidad Léxica:")
+    for i, r in enumerate(resultados_todos):
+        print(f"  Texto {i+1}: {r['densidad_lexica']:.2f}")
+    print()
+
+    print("Distribución de Longitudes de Palabras (proporción):")
+    for i, r in enumerate(resultados_todos):
+        if not r["longitudes_frecuencia"]:
+            print(f"  Texto {i+1}: No hay palabras.")
+        else:
+            pares = ", ".join(f"{k}:{v:.2f}" for k, v in sorted(r["longitudes_frecuencia"].items()))
+            print(f"  Texto {i+1}: {pares}")
+    print("-" * 35)
+
+def top_palabras_formato(textos, n):
+    print("\nTOP DE PALABRAS MÁS FRECUENTES")
+    print("-" * 35)
+
+    tops = []
+    for txt in textos:
+        lista_palabras = crear_lista_palabras(txt)
+        frecuencia, _, _, _ = frecuencia_palabras(lista_palabras)
+        tops.append(ranking_palabras(frecuencia, n))
+
+    for i, top_n in enumerate(tops):
+        print(f"Texto {i+1}:")
+        if not top_n:
+            print("  No hay palabras.")
+        else:
+            for j, (palabra, veces) in enumerate(top_n, start=1):
+                print(f"  {j}) {palabra}: {veces} {singular_plural(veces, 'vez', 'veces')}")
+        print("-" * 35)
+
+def unicas_formato(textos):
+    print("\nPALABRAS ÚNICAS EN LOS TEXTOS")
+    print("-" * 35)
+    for i, txt in enumerate(textos):
+        lista_palabras = crear_lista_palabras(txt)
+        _, _, _, unicas = frecuencia_palabras(lista_palabras)
+        print(f"Texto {i+1}:")
+        if len(unicas) == 0:
+            print("  Palabras Únicas: No hay")
+        elif len(unicas) == 1:
+            print(f"  Palabra Única (1): {unicas}")
+        else:
+            print(f"  Palabras Únicas ({len(unicas)}): {unicas}")
+        print("-" * 35)
+
+def distribucion_formato(textos):
+    print("\nDISTRIBUCIÓN DE LONGITUDES DE PALABRAS")
+    print("-" * 45)
+    for i, txt in enumerate(textos):
+        lista_palabras = crear_lista_palabras(txt)
+        dist = distribucion_longitudes(lista_palabras, porcentaje=True)
+        print(f"Texto {i+1}:")
+        if not dist:
+            print("  No hay palabras.")
+        else:
+            for longitud, porcentaje in sorted(dist.items()):
+                print(f"  - {longitud} {singular_plural(longitud, 'letra', 'letras')}: {porcentaje:.2f}%")
+        print("-" * 35)
+
+# ---- Impresión tabular prolija para matrices (opción 7) ----
+def formatear_valor(v):
+    return f"{v:.2f}" if isinstance(v, float) else str(v)
+
+def imprimir_matriz_metricas(metricas, matriz):
+    encabezados = ["Texto"] + [m.replace("_", " ").capitalize() for m in metricas]
+    filas = []
+    for i, fila in enumerate(matriz):
+        filas.append([str(i+1)] + [formatear_valor(x) for x in fila])
+    anchos = [len(e) for e in encabezados]
+    for fila in filas:
+        for idx, celda in enumerate(fila):
+            if len(celda) > anchos[idx]:
+                anchos[idx] = len(celda)
+    separador = "-".join("-" * (a + 2) for a in anchos)
+
+    print("\nMATRIZ DE MÉTRICAS DE LOS TEXTOS")
+    print(separador)
+    print(" | ".join(encabezados[i].ljust(anchos[i]) for i in range(len(encabezados))))
+    print(separador)
+    for fila in filas:
+        print(" | ".join(fila[i].ljust(anchos[i]) for i in range(len(fila))))
+    print(separador)
+
+
+def crear_matriz_metricas(textos):
+    metricas = [
+        "caracteres",
+        "palabras",
+        "lineas",
+        "promedio_letras",
+        "longitud_palabra_mas_larga",
+        "maximo",
+        "densidad_lexica"
+    ]
+    matriz = []
+    for txt in textos:
+        resultados = analizar_texto(txt)
+        fila = [resultados[k] for k in metricas]
+        matriz.append(fila)
+    return matriz, metricas
+
+def matriz_metricas_formato(textos):
+    matriz, metricas = crear_matriz_metricas(textos)
+    imprimir_matriz_metricas(metricas, matriz)
+
+def promedio_metricas(matriz, claves):
+    metricas_dict = {k: [] for k in claves}
+    for fila in matriz:
+        for j, val in enumerate(fila):
+            metricas_dict[claves[j]].append(val)
+    promedios = {}
+    for k, valores in metricas_dict.items():
+        promedios[k] = sum(valores) / len(valores) if len(valores) > 0 else 0
+    return promedios
+
+def promedios_formato(textos):
+    print("\nPROMEDIO DE MÉTRICAS ENTRE LOS TEXTOS")
+    print("-" * 45)
+    matriz, metricas = crear_matriz_metricas(textos)
+    promedios = promedio_metricas(matriz, metricas)
+    for metrica, valor in promedios.items():
+        etiqueta = metrica.replace("_", " ").capitalize()
+        if isinstance(valor, float):
+            print(f"- {etiqueta}: {valor:.2f}")
+        else:
+            print(f"- {etiqueta}: {valor}")
+    print("-" * 45)
+
+def comparar_textos(textos):
+    if len(textos) < 2:
+        print("Se necesitan al menos 2 textos para comparar.")
+        return
+    sets = [set(crear_lista_palabras(txt)) for txt in textos]
+    interseccion = set.intersection(*sets)
+    union = set.union(*sets)
+    jaccard = len(interseccion) / len(union) if len(union) > 0 else 0
+    print("\nCOMPARACIÓN ENTRE TEXTOS")
+    if len(interseccion) == 0:
+        print("Palabras compartidas entre todos los textos: No hay")
+    else:
+        print(f"Palabras compartidas entre todos los textos: {interseccion}")
+    print(f"Índice de similitud de Jaccard: {jaccard:.2f}\n")
+
+def main():
+    textos = []
+    while True:
+        try:
+            txt = input("Ingrese un texto (o presione Enter para finalizar): ")
+            if len(txt) > 10000:
+                raise ValueError
+            if txt.strip() == "":
+                break
+            textos.append(txt)
+        except ValueError:
+            print("El texto ingresado es demasiado largo. Intente con un texto más corto.")
+    if not textos:
+        print("No se ingresó ningún texto. Fin del programa.")
+        return
+
+    while True:
+        print('''
+==============================
+        MENÚ PRINCIPAL
+==============================
+1. Ver Reporte General de un Texto
+2. Top de Palabras Más Frecuentes
+3. Buscar Palabra en un Texto (Próximamente)
+4. Mostrar Palabras Únicas
+5. Comparar Textos (Similitud y Vocabulario)
+6. Ver Distribución de Longitudes de Palabras
+7. Mostrar Matriz de Métricas
+8. Ver Promedios de Métricas
+9. Mostrar Textos Cargados
+0. Salir
+==============================''')
+
+        while True:
+            try:
+                opcion = int(input('Ingrese una opción (0-9): '))
+                if 0 <= opcion <= 9:
+                    break
+                else:
+                    print("Ingrese un número válido.")
+            except ValueError:
+                print("Ingrese un número válido.")
+
+
+        if opcion == 1:
+            reporte_opcion_1(textos)
+
+        elif opcion == 2:
+            try:
+                n = int(input("¿Cuántas palabras mostrar?: "))
+            except ValueError:
+                print("Ingrese un número válido.")
+                continue
+            top_palabras_formato(textos, n)
+
+        elif opcion == 3:
+            print("Próximamente... (búsqueda con expresiones regulares)")
+
+        elif opcion == 4:
+            unicas_formato(textos)
+
+        elif opcion == 5:
+            try:
+                if len(textos) < 2:
+                    raise ValueError
+                comparar_textos(textos)
+            except ValueError:
+                print("Se necesitan al menos 2 textos para comparar.")
+
+
+        elif opcion == 6:
+            distribucion_formato(textos)
+
+        elif opcion == 7:
+            try:
+                if not textos:
+                    raise ValueError
+                matriz_metricas_formato(textos)
+            except ValueError:
+                print("No hay textos cargados para generar la matriz.")
+
+
+        elif opcion == 8:
+            promedios_formato(textos)
+        
+        elif opcion == 9:
+                mostrar_textos_recursivo(textos)
+
+
+        elif opcion == 0:
+            print("\nPrograma finalizado.")
+            break
+
+if __name__ == "__main__":
+    main()
