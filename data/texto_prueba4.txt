@@ -1,0 +1,12 @@
+El lunes 23 de octubre de 2025, a las 14:37, Juan Pérez (juan.perez@example.com) escribió:
+"Hola! Te envío el informe final. Los datos están en https://data.example.org/report?id=349&lang=es."
+
+El documento incluye 3 secciones principales:
+1) Introducción — breve resumen del proyecto.
+2) Resultados — 25 mediciones tomadas entre el 10/09/2024 y el 18/10/2025.
+3) Conclusión — análisis de las tendencias observadas.
+
+Recordá que las contraseñas temporales expiran en 48h.  
+Para soporte técnico, contactá a soporte@empresa.com o al número +54 11 4321-6789.
+
+PD: algunos valores, como el 3.14159 o el 2,71828, se incluyen solo como ejemplos matemáticos.

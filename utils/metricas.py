@@ -1,4 +1,5 @@
 from .text_utils import crear_lista_palabras
+import re
 
 def info_basica_texto(txt):
     lista_palabras = crear_lista_palabras(txt)
@@ -7,13 +8,16 @@ def info_basica_texto(txt):
     palabras = len(txt.split(' '))
     lineas = len(txt.splitlines())
 
+    separador_de_oraciones = re.compile(r'(?<=[.!?])\s+')
+    oraciones = re.split(separador_de_oraciones, txt)
+
     letras = 0
     for p in lista_palabras:
         letras += len(p)
 
     letras_promedio = letras / palabras
 
-    return caracteres, palabras, lineas, letras_promedio, lista_palabras
+    return caracteres, palabras, lineas, oraciones, letras_promedio, lista_palabras
 
 
 def frecuencia_palabras(lista_palabras):

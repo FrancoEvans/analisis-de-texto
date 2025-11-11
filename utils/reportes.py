@@ -10,7 +10,7 @@ from .text_utils import crear_lista_palabras
 
 
 def analizar_texto(txt):
-    caracteres, palabras, lineas, letras_promedio, lista_palabras = info_basica_texto(txt)
+    caracteres, palabras, lineas, oraciones, letras_promedio, lista_palabras = info_basica_texto(txt)
 
     palabras_mas_largas = palabra_mas_larga(lista_palabras)
     frecuencia, mas_frecuentes, maximo, unicas = frecuencia_palabras(lista_palabras)
@@ -21,6 +21,7 @@ def analizar_texto(txt):
         "caracteres": caracteres,
         "palabras": palabras,
         "lineas": lineas,
+        "oraciones": len(oraciones),
         "promedio_letras": round(letras_promedio),
         "palabras_mas_largas": palabras_mas_largas,
         "longitud_palabra_mas_larga": len(palabras_mas_largas[0]) if palabras_mas_largas else 0,
@@ -40,7 +41,8 @@ def reporte(resultados):
     caracteres: {resultados["caracteres"]}
     palabras: {resultados["palabras"]}
     lineas: {resultados["lineas"]}
-    palabra/s más larga/s: {resultados["palabras_mas_largas"]} ({resultados["longitud_palabra_mas_larga"]} caracteres)
+    oraciones: {resultados["oraciones"]}
+    palabra/s más larga/s: {str(resultados["palabras_mas_largas"])} ({resultados["longitud_palabra_mas_larga"]} caracteres)
     promedio de caracteres por palabra: {resultados["promedio_letras"]}
     frecuencia: {resultados["frecuencia"]}
     más frecuentes: {resultados["mas_frecuentes"]}

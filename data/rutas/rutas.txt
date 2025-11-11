@@ -1,0 +1,4 @@
+data/texto_prueba1.txt
+data/texto_prueba2.txt
+data/texto_prueba3.txt
+data/texto_prueba4.txt

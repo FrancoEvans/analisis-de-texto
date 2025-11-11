@@ -1,18 +1,6 @@
 # PROGRAMA DE ANALISIS DE TEXTO
 
 
-# CON MANEJO DE ARCHIVOS:
-
-# with open('texto_prueba1.txt', 'r', encoding='utf-8') as file:
-#     txt = file.read()
-
-# with open('texto_prueba2.txt', 'r', encoding='utf-8') as file:
-#     txt2 = file.read()
-
-# with open('texto_prueba3.txt', 'r', encoding='utf-8') as file:
-#     txt3 = file.read()
-
-
 from utils.text_utils import crear_lista_palabras
 from utils.metricas import frecuencia_palabras, ranking_palabras, distribucion_longitudes
 from utils.reportes import (
@@ -22,20 +10,13 @@ from utils.reportes import (
     crear_matriz_metricas,
     promedio_metricas
 )
+from utils.regex import buscar_palabra
 
 
-
-def main():
-    textos = []
-
-    while True:
-        txt = input("ingrese texto (o 'enter' para terminar): ")
-        if txt.strip() == "":
-            break
-        textos.append(txt)
-
+def main(textos):
+    
     if not textos:
-        print("No se ingreso ningun texto. fin")
+        print("No hay ningun texto. fin")
         return
 
     while True:
@@ -43,7 +24,7 @@ def main():
         \n        MENU
         1. ver reporte general de un texto
         2. top de palabras mas frecuentes
-        3. buscar palabra en un texto (proximamente)
+        3. buscar palabra en un texto
         4. mostrar palabras unicas
         5. comparar textos (similitud y vocabulario)
         6. ver distribucion de longitudes de palabras
@@ -80,7 +61,16 @@ def main():
                 print(f"{i+1}) {palabra}: {veces} veces")
 
         elif opcion == 3:
-            print('proximamente...(regex)')
+            palabra = input('ingrese palabra: ')
+            i = 1
+            for txt in textos:
+                resultados = buscar_palabra(palabra, txt)
+                cantidad = len(resultados)
+                if cantidad == 0:
+                    print(f'en el texto {i} no aparece la palabra "{palabra}"')
+                else:
+                    print(f'en el texto {i} la palabra "{palabra}" aparece {cantidad} veces')
+                i+=1
 
         elif opcion == 4:
             # PALABRAS UNICAS
