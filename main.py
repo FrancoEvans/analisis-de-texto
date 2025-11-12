@@ -24,6 +24,7 @@ from utils.textos_json import (
 from utils.rutas import (
     elegir_varias_rutas
 )
+from utils.regex import buscar_regex
 
 def main():
 
@@ -72,7 +73,9 @@ def main():
             top_palabras(textos)
 
         elif opcion == 3:
-            print("Próximamente... (búsqueda con expresiones regulares)")
+            for i, txt in enumerate(textos, start=1):
+                print(f"\n--- texto {i} ---")
+                buscar_regex(txt)
 
         elif opcion == 4:
             palabras_unicas_textos(textos)
