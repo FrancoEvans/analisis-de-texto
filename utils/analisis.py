@@ -54,9 +54,7 @@ def analizar_texto(txt):
 
 def mostrar_textos(textos, i=0):
     if i == 0:
-        print("\n==============================")
-        print("       TEXTOS CARGADOS")
-        print("==============================")
+        print("\n      TEXTOS CARGADOS")
         if not textos:
             print("No hay textos cargados.\n")
             return

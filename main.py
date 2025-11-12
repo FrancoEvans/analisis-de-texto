@@ -34,26 +34,26 @@ def main():
             texto = f.read().strip()
             textos.append(texto)
     
+    resultados_todos = [analizar_texto(t) for t in textos]
+
     while True:
         print('''
-==============================
-        MENÚ PRINCIPAL
-==============================
+Menu
 
-1. Ver Reporte General de un Texto
-2. Top de Palabras Más Frecuentes
-3. Buscar Palabra en un Texto (Próximamente)
-4. Mostrar Palabras Únicas
-5. Comparar Textos (Similitud y Vocabulario)
-6. Mostrar Matriz de Métricas
-7. Ver Promedios de Métricas
-8. Mostrar Textos Cargados
-9. Cargar Más Textos
-10. Guardar Resultados en JSON
-11. Guardar Textos en JSON
-12. Cargar Textos desde JSON
-0. Salir
-==============================''')
+1. ver reporte general de un texto  
+2. top de palabras más frecuentes  
+3. buscar palabra o patron en un texto 
+4. mostrar palabras únicas  
+5. comparar textos (similitud y vocabulario)  
+6. mostrar matriz de métricas  
+7. ver promedios de métricas  
+8. mostrar textos cargados  
+9. cargar más textos  
+10. guardar resultados en json  
+11. guardar textos en json  
+12. cargar textos desde json  
+0. salir
+''')
 
 
         while True:
@@ -67,7 +67,11 @@ def main():
                 print("Ingrese un número válido.")
 
         if opcion == 1:
-            reporte_opcion_1(resultados_todos)
+            if not textos:
+                print("No hay textos cargados.")
+            else:
+                resultados_todos = [analizar_texto(t) for t in textos] 
+                reporte_opcion_1(resultados_todos)
 
         elif opcion == 2:
             top_palabras(textos)

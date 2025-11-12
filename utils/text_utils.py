@@ -6,7 +6,7 @@ def normalizar(palabra: str):
         return palabra.lower()
     
     except AttributeError:
-        print("Error! No se ingreso string. Se devolvera una cadena vacia.")
+        print("Error. no se ingreso string. se devolvera un string vacio")
         return ""
 
 
@@ -16,7 +16,7 @@ def crear_lista_palabras(txt):
         return lista_palabras
     
     except AttributeError:
-        print("Error! El texto no es una cadena válida. Se devolvera una lista vacia.")
+        print("Error. el texto no es una cadena válida. se devolvera una lista vacio")
         return []
     
 

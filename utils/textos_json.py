@@ -35,9 +35,8 @@ def seleccionar_textos(cantidad, minimo=2):
 
 
 def cargar_mas_textos(textos):
-    print("\n==============================")
-    print("      CARGAR MÁS TEXTOS")
-    print("==============================")
+    print("\n      CARGAR MÁS TEXTOS")
+
 
     cantidad_inicial = len(textos)
 

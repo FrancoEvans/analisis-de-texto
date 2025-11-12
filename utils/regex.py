@@ -39,7 +39,6 @@ menu de busqueda
     if opcion == 0:
         return
 
-    # opcion 1: palabra exacta (tu logica original)
     if opcion == 1:
         palabra = input('ingresa palabra: ').strip()
         patron = re.compile(rf'\b{re.escape(palabra)}\b', re.IGNORECASE)
@@ -49,7 +48,7 @@ menu de busqueda
             print('coincidencias:', resultados)
         return
 
-    # opcion 2: patrones
+   
     if opcion == 2:
         print('''
 elige el tipo de patron
