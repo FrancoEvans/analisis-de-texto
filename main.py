@@ -3,7 +3,7 @@
 
 from utils.text_utils import crear_lista_palabras
 from utils.metricas import frecuencia_palabras, ranking_palabras, distribucion_longitudes
-from utils.reportes import (
+from utils.analisis import (
     analizar_texto,
     reporte,
     comparar_textos,
@@ -13,101 +13,99 @@ from utils.reportes import (
 from utils.regex import buscar_palabra
 
 
-def main(textos):
-    
+def main():
+    textos = []
+    while True:
+        try:
+            txt = input("Ingrese un texto (o presione Enter para finalizar): ")
+            if len(txt) > 10000:
+                raise ValueError
+            if txt.strip() == "":
+                break
+            textos.append(txt)
+        except ValueError:
+            print("El texto ingresado es demasiado largo. Intente con un texto más corto.")
+
     if not textos:
-        print("No hay ningun texto. fin")
+        print("No se ingresó ningún texto. Fin del programa.")
         return
+
+    resultados_todos = [analizar_texto(t) for t in textos]
 
     while True:
         print('''
-        \n        MENU
-        1. ver reporte general de un texto
-        2. top de palabras mas frecuentes
-        3. buscar palabra en un texto
-        4. mostrar palabras unicas
-        5. comparar textos (similitud y vocabulario)
-        6. ver distribucion de longitudes de palabras
-        7. mostrar matriz de metricas
-        8. ver promedios de metricas
-        0. salir
-        ''')
+==============================
+        MENÚ PRINCIPAL
+==============================
+
+1. Ver Reporte General de un Texto
+2. Top de Palabras Más Frecuentes
+3. Buscar Palabra en un Texto (Próximamente)
+4. Mostrar Palabras Únicas
+5. Comparar Textos (Similitud y Vocabulario)
+6. Mostrar Matriz de Métricas
+7. Ver Promedios de Métricas
+8. Mostrar Textos Cargados
+9. Cargar Más Textos
+10. Guardar Resultados en JSON
+11. Guardar Textos en JSON
+12. Cargar Textos desde JSON
+0. Salir
+==============================''')
+
 
         while True:
-            opcion = int(input('Ingrese una opcion (0-8): '))
-            if 0 <= opcion <= 8:
-                break
+            try:
+                opcion = int(input('Ingrese una opción (0-12): '))
+                if 0 <= opcion <= 12:
+                    break
+                else:
+                    print("Ingrese un número válido.")
+            except ValueError:
+                print("Ingrese un número válido.")
 
         if opcion == 1:
-            # Reporte
-            for i, txt in enumerate(textos):
-                print(f"\nTEXTO {i+1}")
-                resultados = analizar_texto(txt)
-                reporte(resultados)
+            reporte_opcion_1(resultados_todos)
 
         elif opcion == 2:
-           # TOP PALABRAS MAS FRECUENTES
-           n = int(input("cuantas palabras mostrar?: "))
-           
-           for i, txt in enumerate(textos):
-            lista_palabras = crear_lista_palabras(txt)
-            frecuencia, _, _, _ = frecuencia_palabras(lista_palabras)
-            top_n = ranking_palabras(frecuencia, n)
-
-            print(f"\nTEXTO {i+1}")
-            print(f"TOP {n}")
-                
-            for i, (palabra, veces) in enumerate(top_n):
-                print(f"{i+1}) {palabra}: {veces} veces")
+            top_palabras(textos)
 
         elif opcion == 3:
-            palabra = input('ingrese palabra: ')
-            i = 1
-            for txt in textos:
-                resultados = buscar_palabra(palabra, txt)
-                cantidad = len(resultados)
-                if cantidad == 0:
-                    print(f'en el texto {i} no aparece la palabra "{palabra}"')
-                else:
-                    print(f'en el texto {i} la palabra "{palabra}" aparece {cantidad} veces')
-                i+=1
+            print("Próximamente... (búsqueda con expresiones regulares)")
 
         elif opcion == 4:
-            # PALABRAS UNICAS
-            for i, txt in enumerate(textos):
-                lista_palabras = crear_lista_palabras(txt)
-                _, _, _, unicas = frecuencia_palabras(lista_palabras)
-                print(f"\nTEXTO {i+1}")
-                print("palabras únicas:", unicas)
+            palabras_unicas_textos(textos)
 
         elif opcion == 5:
-            # COMPARAR TEXTOS
             comparar_textos(textos)
 
         elif opcion == 6:
-            # DISTRIBUCION DE LONGITUDES
-            dist = distribucion_longitudes(lista_palabras, porcentaje=True)
-            for i, txt in enumerate(textos):
-                lista_palabras = crear_lista_palabras(txt)
-                print(f"\nTEXTO {i+1}")
-                for longitud, porcentaje in dist.items():
-                    print(f"- {longitud}: {porcentaje:.2f}%")
+            cargar_matriz_metricas(textos)
 
         elif opcion == 7:
-            # MATRIZ 
-            matriz, metricas = crear_matriz_metricas(textos)
-            print("matriz de metricas:", metricas)
-            for i, fila in enumerate(matriz):
-                print(f"TEXTO {i+1} -> {fila}")
-
+            promedios(textos)
+        
         elif opcion == 8:
-            matriz, metricas = crear_matriz_metricas(textos)
-            promedios = promedio_metricas(matriz, metricas)
-            print("promedio de metricas:", promedios)
+            mostrar_textos(textos)
+        
+        elif opcion == 9:
+            textos = cargar_mas_textos(textos)
+            resultados_todos = [analizar_texto(t) for t in textos]
+        
+        elif opcion == 10:
+            guardar_resultados_json(resultados_todos)
+        
+        elif opcion == 11:
+            guardar_textos_json(textos)
+
+        elif opcion == 12:
+            textos = cargar_textos_json()
+            resultados_todos = [analizar_texto(t) for t in textos]
+
 
         elif opcion == 0:
-            print("fin")
+            print("\nPrograma finalizado.")
             break
 
-main()
-
+if __name__ == "__main__":
+    main()

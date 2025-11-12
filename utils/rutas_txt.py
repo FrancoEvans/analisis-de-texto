@@ -1,6 +1,6 @@
 from pathlib import Path
 
-rutas_file = Path('data/rutas/rutas.txt')
+rutas_file = Path('data/textos/rutas.txt')
 
 
 def lista_de_rutas():
