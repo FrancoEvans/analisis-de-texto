@@ -30,10 +30,11 @@ def eliminar_ruta(ruta):
 
 def elegir_ruta():
     rutas = lista_de_rutas()
-    print("\nRUTAS:")
-    print("0) Agregar nueva ruta")
+    print('\nRUTAS:')
+    print('0) Agregar nueva')
+    print('1) Eliminar ruta')
 
-    for i, ruta in enumerate(rutas, start=1):
+    for i, ruta in enumerate(rutas, start=2):
         print(f'{i}) {ruta}')
 
     while True:
@@ -45,14 +46,38 @@ def elegir_ruta():
                 rutas = lista_de_rutas()
                 continue
 
-            if 1 <= ruta_elegida <= len(rutas):
-                return rutas[ruta_elegida - 1]
+            if ruta_elegida == 1:
+                eliminar_ruta(input('ingrese una ruta para eliminar: '))
+                rutas = lista_de_rutas()
+                continue
+
+            if 2 <= ruta_elegida <= len(rutas) + 1:
+                return rutas[ruta_elegida - 2]
 
             print("numero fuera de rango. ingrese de nuevo")
 
         except ValueError:
             print("caracter invalido, ingrese de nuevo")
 
+def elegir_varias_rutas():
+    rutas = []
 
-# listo
+    while True:
+        ruta = elegir_ruta()
+        if ruta:
+            rutas.append(ruta)
+            print(f"ruta agregada: {ruta}")
+        else:
+            print("no se seleccionó ninguna ruta")
+
+        seguir = input("\nseleccionar mas rutas? (s/n): ").strip().lower()
+        if seguir != "s":
+            break
+
+    print("\nrutas seleccionadas:")
+    for i, r in enumerate(rutas, start=1):
+        print(f"{i}) {r}")
+
+    return rutas
+
 

@@ -1,37 +1,38 @@
 # PROGRAMA DE ANALISIS DE TEXTO
 
-
-from utils.text_utils import crear_lista_palabras
-from utils.metricas import frecuencia_palabras, ranking_palabras, distribucion_longitudes
 from utils.analisis import (
     analizar_texto,
-    reporte,
     comparar_textos,
-    crear_matriz_metricas,
-    promedio_metricas
+    mostrar_textos,
 )
-from utils.regex import buscar_palabra
+from utils.reportes import reporte_opcion_1
+from utils.metricas import (
+    top_palabras,
+    palabras_unicas_textos,
 
+)
+from utils.matrices import (
+    cargar_matriz_metricas,
+    promedios
+)
+from utils.textos_json import (
+    cargar_mas_textos,
+    guardar_resultados_json,
+    guardar_textos_json,
+    cargar_textos_json
+)
+from utils.rutas import (
+    elegir_varias_rutas
+)
 
 def main():
+
     textos = []
-    while True:
-        try:
-            txt = input("Ingrese un texto (o presione Enter para finalizar): ")
-            if len(txt) > 10000:
-                raise ValueError
-            if txt.strip() == "":
-                break
-            textos.append(txt)
-        except ValueError:
-            print("El texto ingresado es demasiado largo. Intente con un texto más corto.")
-
-    if not textos:
-        print("No se ingresó ningún texto. Fin del programa.")
-        return
-
-    resultados_todos = [analizar_texto(t) for t in textos]
-
+    for ruta in elegir_varias_rutas():
+        with open(ruta, "r", encoding="utf-8") as f:
+            texto = f.read().strip()
+            textos.append(texto)
+    
     while True:
         print('''
 ==============================
