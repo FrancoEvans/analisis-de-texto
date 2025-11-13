@@ -16,7 +16,6 @@ from utils.matrices import (
     promedios
 )
 from utils.textos_json import (
-    cargar_mas_textos,
     guardar_resultados_json,
     guardar_textos_json,
     cargar_textos_json
@@ -38,21 +37,21 @@ def main():
 
     while True:
         print('''
-Menu
+MENU
 
-1. ver reporte general de un texto  
-2. top de palabras más frecuentes  
-3. buscar palabra o patron en un texto 
-4. mostrar palabras únicas  
-5. comparar textos (similitud y vocabulario)  
-6. mostrar matriz de métricas  
-7. ver promedios de métricas  
-8. mostrar textos cargados  
-9. cargar más textos  
-10. guardar resultados en json  
-11. guardar textos en json  
-12. cargar textos desde json  
-0. salir
+1. Ver reporte general de un texto  
+2. Top de palabras más frecuentes  
+3. Buscar palabra o patron en un texto 
+4. Mostrar palabras únicas  
+5. Comparar textos (similitud y vocabulario)  
+6. Mostrar matriz de métricas  
+7. Ver promedios de métricas  
+8. Mostrar textos cargados  
+9. Cargar más textos  
+10. Guardar resultados en json  
+11. Guardar textos en json  
+12. Cargar textos desde json  
+0. Salir
 ''')
 
 
@@ -97,7 +96,10 @@ Menu
             mostrar_textos(textos)
         
         elif opcion == 9:
-            textos = cargar_mas_textos(textos)
+            for ruta in elegir_varias_rutas():
+                with open(ruta, "r", encoding="utf-8") as f:
+                    texto = f.read().strip()
+                    textos.append(texto)
             resultados_todos = [analizar_texto(t) for t in textos]
         
         elif opcion == 10:
@@ -112,7 +114,7 @@ Menu
 
 
         elif opcion == 0:
-            print("\nPrograma finalizado.")
+            print("\nFin.")
             break
 
 if __name__ == "__main__":

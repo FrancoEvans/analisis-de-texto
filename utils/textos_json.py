@@ -34,6 +34,50 @@ def seleccionar_textos(cantidad, minimo=2):
             print("Entrada inválida. Intente de nuevo.")
 
 
+def guardar_resultados_json(resultados_todos):
+    try:
+        arch = open("data/textos/resultados.json", "wt")
+        json.dump(resultados_todos, arch)
+        print("\nResultados guardados correctamente en 'resultados.json'.")
+    except (FileNotFoundError, OSError) as error:
+        print("ERROR DE GRABACION:", error)
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            pass
+        
+def guardar_textos_json(textos):
+    try:
+        arch = open("data/textos/textos.json", "wt", encoding="utf-8")
+        json.dump(textos, arch)
+        print("\nTextos guardados correctamente en 'textos.json'.")
+    except (FileNotFoundError, OSError) as error:
+        print("ERROR DE GRABACION:", error)
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            pass
+
+def cargar_textos_json():
+    try:
+        arch = open("textos.json", "rt", encoding="utf-8")
+        textos = json.load(arch)
+        print(f"\nSe cargaron {len(textos)} textos desde 'textos.json'.")
+        return textos
+    except (FileNotFoundError, OSError) as error:
+        print("ERROR DE LECTURA:", error)
+        return []
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            pass
+
+
+# en desuso:
+
 def cargar_mas_textos(textos):
     print("\n      CARGAR MÁS TEXTOS")
 
@@ -61,44 +105,3 @@ def cargar_mas_textos(textos):
         print(f"Se cargaron {nuevos} textos nuevos.")
 
     return textos
-
-def guardar_resultados_json(resultados_todos):
-    try:
-        arch = open("resultados.json", "wt")
-        json.dump(resultados_todos, arch)
-        print("\nResultados guardados correctamente en 'resultados.json'.")
-    except (FileNotFoundError, OSError) as error:
-        print("ERROR DE GRABACION:", error)
-    finally:
-        try:
-            arch.close()
-        except NameError:
-            pass
-        
-def guardar_textos_json(textos):
-    try:
-        arch = open("textos.json", "wt", encoding="utf-8")
-        json.dump(textos, arch)
-        print("\nTextos guardados correctamente en 'textos.json'.")
-    except (FileNotFoundError, OSError) as error:
-        print("ERROR DE GRABACION:", error)
-    finally:
-        try:
-            arch.close()
-        except NameError:
-            pass
-
-def cargar_textos_json():
-    try:
-        arch = open("textos.json", "rt", encoding="utf-8")
-        textos = json.load(arch)
-        print(f"\nSe cargaron {len(textos)} textos desde 'textos.json'.")
-        return textos
-    except (FileNotFoundError, OSError) as error:
-        print("ERROR DE LECTURA:", error)
-        return []
-    finally:
-        try:
-            arch.close()
-        except NameError:
-            pass
