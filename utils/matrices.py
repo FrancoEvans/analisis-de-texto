@@ -8,6 +8,25 @@ from .text_utils import formatear_valor
 from .analisis import analizar_texto
 from .textos_json import seleccionar_textos
 
+
+def crear_matriz_metricas(textos):
+    metricas = [
+        "caracteres",
+        "palabras",
+        "lineas",
+        "promedio_letras",
+        "longitud_palabra_mas_larga",
+        "maximo",
+        "densidad_lexica"
+    ]
+    matriz = []
+    for txt in textos:
+        resultados = analizar_texto(txt)
+        fila = [resultados[k] for k in metricas]
+        matriz.append(fila)
+    return matriz, metricas
+
+
 def imprimir_matriz_metricas(metricas, matriz):
     encabezados = ["Texto"] + [m.replace("_", " ").capitalize() for m in metricas]
     filas = []
@@ -28,23 +47,6 @@ def imprimir_matriz_metricas(metricas, matriz):
         print(" | ".join(fila[i].ljust(anchos[i]) for i in range(len(fila))))
     print(separador)
 
-
-def crear_matriz_metricas(textos):
-    metricas = [
-        "caracteres",
-        "palabras",
-        "lineas",
-        "promedio_letras",
-        "longitud_palabra_mas_larga",
-        "maximo",
-        "densidad_lexica"
-    ]
-    matriz = []
-    for txt in textos:
-        resultados = analizar_texto(txt)
-        fila = [resultados[k] for k in metricas]
-        matriz.append(fila)
-    return matriz, metricas
 
 def cargar_matriz_metricas(textos):
     if not textos:

@@ -1,6 +1,10 @@
 import json 
 
 def seleccionar_textos(cantidad, minimo=2):
+
+    if cantidad == 1:
+        return [0]
+
     if cantidad < minimo:
         print(f"Se necesitan al menos {minimo} textos, pero solo hay {cantidad}.")
         return []
@@ -36,8 +40,8 @@ def seleccionar_textos(cantidad, minimo=2):
 
 def guardar_resultados_json(resultados_todos):
     try:
-        arch = open("data/textos/resultados.json", "wt")
-        json.dump(resultados_todos, arch)
+        arch = open("data/textos/resultados.json", "wt", encoding="utf-8")
+        json.dump(resultados_todos, arch, indent=4, ensure_ascii=False, sort_keys=True)
         print("\nResultados guardados correctamente en 'resultados.json'.")
     except (FileNotFoundError, OSError) as error:
         print("ERROR DE GRABACION:", error)
@@ -50,7 +54,7 @@ def guardar_resultados_json(resultados_todos):
 def guardar_textos_json(textos):
     try:
         arch = open("data/textos/textos.json", "wt", encoding="utf-8")
-        json.dump(textos, arch)
+        json.dump(textos, arch, indent=4, ensure_ascii=False, sort_keys=True)
         print("\nTextos guardados correctamente en 'textos.json'.")
     except (FileNotFoundError, OSError) as error:
         print("ERROR DE GRABACION:", error)

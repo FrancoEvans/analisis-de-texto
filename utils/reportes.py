@@ -1,4 +1,5 @@
 from .textos_json import seleccionar_textos
+from .text_utils import formatear_valor
 
 def reporte_opcion_1(resultados_todos):
     print("\nREPORTE GENERAL DE TEXTOS")
@@ -72,6 +73,7 @@ def reporte_opcion_1(resultados_todos):
         if not resultado["longitudes_frecuencia"]:
             print(f"  Texto {idx+1}: No hay palabras.")
         else:
-            pares = ", ".join(f"{k}:{v:.2f}" for k, v in sorted(resultado["longitudes_frecuencia"].items()))
+            pares = ", ".join(f"{k}:{formatear_valor(v)}" for k, v in sorted(resultado["longitudes_frecuencia"].items()))
             print(f"  Texto {idx+1}: {pares}")
     print("-" * 35)
+
